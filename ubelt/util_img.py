@@ -30,7 +30,10 @@ def break_video(video, output_folder):
 
 def join_video(input_folder, output_file):
     images = sorted(glob.glob('{}/*'.format(input_folder)))
-    video_writer = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
+    img = cv2.imread(images[0])
+    frame_height, frame_width = img.shape[:2]
+
+    video_writer = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
     for image_name in images:
         img = cv2.imread(image_name)
         video_writer.write(img)
@@ -39,7 +42,7 @@ def join_video(input_folder, output_file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--function', type=str, default='break_video', help="select a functionality from the list: break_video, break_videos, (others will be added eventually")
+    parser.add_argument('--function', type=str, default='break_video', help="select a functionality from the list: break_video, break_videos, join_video (others will be added eventually")
     parser.add_argument('--input_folder', type=str, default='', help='path to the video')
     parser.add_argument('--output_folder', type=str, default='~/temp/broken_video', help='path to write the output. Will be created if not present')
     parser.add_argument('--regex', type=str, help='An optional glob regex to filter the files in the input folder')
@@ -49,3 +52,6 @@ if __name__ == "__main__":
         break_video(args.input_folder, args.output_folder)
     elif args.function == "break_videos":
         break_videos(args.input_folder, args.output_folder)
+    elif args.function == "join_video":
+        join_video(args.input_folder, args.output_folder)
+
