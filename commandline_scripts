@@ -1,0 +1,2 @@
+#zero pad all files of the form *keypoints.json
+rename 's/\d+/sprintf("%05d",$&)/e' *keypoints.json
